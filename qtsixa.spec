@@ -1,6 +1,5 @@
-%define oname	QtSixA
 %define name	qtsixa
-%define version	1.2.1
+%define version	1.4.95
 %define rel	1
 
 %define udev_rulesd     /lib/udev/rules.d
@@ -11,7 +10,8 @@ Version:	%{version}
 Release:	%mkrel %{rel}
 Summary:	The Sixaxis Joystick Manager
 Url:		http://qtsixa.sourceforge.net/
-Source:		http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{oname}-%{version}-src.tar.gz
+Source:		http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}_%{version}.tar.gz
+Patch0:		qtsixa-fstat.patch
 License:	GPLv2
 Group:		System/Configuration/Hardware
 BuildRequires:	bluez-devel
@@ -53,18 +53,19 @@ sixad is triggered by udev, making it super easy to connect new devices
 (you just need to press the PS button).
 
 %prep
-%setup -q
+%setup -q -n qtsixa-1.5.0
+%patch0 -p0
 
 #fix rights
-chmod a-x qtsixa/manual/* qtsixa/doc/* TODO
+#chmod a-x qtsixa/manual/* qtsixa/doc/* TODO
 
 #fix build flags
-sed -i -e 's|-Wall -O2|%{optflags}|g' sixad/Makefile
-sed -i -e 's|-g -O2 -g -Wall -O2 -D_FORTIFY_SOURCE=2|%{optflags}|g' sixad/hcid/Makefile
+sed -i -e 's|-Wall -O2|%{optflags}|g' utils/Makefile
+sed -i -e 's|-g -O2 -g -Wall -O2 -D_FORTIFY_SOURCE=2|%{optflags}|g' utils/hcid/Makefile
 
 #fix build
-sed -i -e 's|/usr/lib/libbluetooth.so|/%{_lib}/libbluetooth.so|g' sixad/hcid/Makefile
-sed -i -e 's|/usr/lib/|%{_libdir}/|g' sixad/hcid/Makefile
+sed -i -e 's|/usr/lib/libbluetooth.so|/%{_lib}/libbluetooth.so|g' utils/hcid/Makefile
+sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
 
 %build
 %make
