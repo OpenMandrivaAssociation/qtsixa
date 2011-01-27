@@ -14,7 +14,7 @@ Patch0:		qtsixa-fstat.patch
 Patch1:		qtsixa-initrddir.patch
 License:	GPLv2
 Group:		System/Configuration/Hardware
-BuildRequires:	bluez-devel jack-devel
+BuildRequires:	bluez-devel libjack-devel
 BuildRequires:	libusb-devel
 BuildRequires:	glib2-devel
 BuildRequires:	dbus-devel
