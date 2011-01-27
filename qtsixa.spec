@@ -3,7 +3,6 @@
 %define rel	1
 
 %define udev_rulesd     /lib/udev/rules.d
-%define hal_fdidir	%{_datadir}/hal/fdi/policy/20thirdparty
 
 Name:		%{name}
 Version:	%{version}
@@ -12,12 +11,14 @@ Summary:	The Sixaxis Joystick Manager
 Url:		http://qtsixa.sourceforge.net/
 Source:		http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}_%{version}.tar.gz
 Patch0:		qtsixa-fstat.patch
+Patch1:		qtsixa-initrddir.patch
 License:	GPLv2
 Group:		System/Configuration/Hardware
 BuildRequires:	bluez-devel
 BuildRequires:	libusb-devel
 BuildRequires:	glib2-devel
 BuildRequires:	dbus-devel
+BuildRequires:	python-qt4-devel
 Requires:	sixad = %{version}-%{release}
 Requires:	python-qt4
 Requires:	python-dbus
@@ -55,6 +56,7 @@ sixad is triggered by udev, making it super easy to connect new devices
 %prep
 %setup -q -n qtsixa-1.5.0
 %patch0 -p0
+%patch1 -p1 -b .initrddir
 
 #fix rights
 #chmod a-x qtsixa/manual/* qtsixa/doc/* TODO
@@ -73,46 +75,12 @@ sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
 %install
 rm -rf %{buildroot}
 
-# sixa, binaries
-install -Dp -m0755 sixad/sixad %{buildroot}%{_bindir}/sixad
-install -Dp -m0755 sixad/hcid/hcid %{buildroot}%{_sbindir}/hcid
-install -Dp -m0755 sixad/bins/* %{buildroot}%{_sbindir}/
-
-# sixa, misc files
-install -Dp -m0644 sixad/98-sixad.rules %{buildroot}%{udev_rulesd}/98-sixad.rules
-install -Dp -m0644 sixad/default/sixad %{buildroot}%{_sysconfdir}/default/sixad
-install -Dp -m0755 sixad/init/sixad %{buildroot}%{_initrddir}/sixad
-install	-Dp -m0644 sixad/x11-sony-keypad.fdi %{buildroot}%{hal_fdidir}/x11-sony-keypad.fdi
-install -d -m0755 %{buildroot}%{_mandir}/man1/
-install -Dp -m0644 sixad/mans/* %{buildroot}%{_mandir}/man1/
-
-# qtsixa
-install -d -m0755 %{buildroot}%{_datadir}/qtsixa/{game-profiles,gui,pics,lang,icons,sixaxis-profiles}
-install -Dp -m0644 qtsixa/game-profiles/* %{buildroot}%{_datadir}/qtsixa/game-profiles/
-install	-Dp -m0644 qtsixa/gui/* %{buildroot}%{_datadir}/qtsixa/gui/
-install -Dp -m0644 qtsixa/pics/* %{buildroot}%{_datadir}/qtsixa/pics/
-install -Dp -m0644 qtsixa/lang/* %{buildroot}%{_datadir}/qtsixa/lang/
-install -Dp -m0644 qtsixa/icons/* %{buildroot}%{_datadir}/qtsixa/icons/
-install -Dp -m0644 qtsixa/sixaxis-profiles/* %{buildroot}%{_datadir}/qtsixa/sixaxis-profiles/
-install -Dp -m0755 qtsixa/sixa %{buildroot}%{_bindir}
-install	-Dp -m0755 qtsixa/sixa-lq %{buildroot}%{_bindir}
-install	-Dp -m0755 qtsixa/sixa-notify %{buildroot}%{_bindir}
-install	-Dp -m0755 qtsixa/qtsixa %{buildroot}%{_bindir}
-install	-Dp -m0644 qtsixa/qtsixa.conf %{buildroot}%{_sysconfdir}/%{name}.conf
-install -Dp -m0644 qtsixa/qtsixa.desktop %{buildroot}%{_datadir}/applications/qtsixa.desktop
-install -Dp -m0644 qtsixa/qtsixa.xpm %{buildroot}%{_datadir}/pixmaps/qtsixa.xpm
-install -Dp -m0644 qtsixa/profiles.list.bu %{buildroot}%{_datadir}/%{name}/
-install -Dp -m0644 qtsixa/features.html %{buildroot}%{_datadir}/%{name}/
-install -Dp -m0644 qtsixa/sixa-notify.desktop %{buildroot}%{_datadir}/%{name}/
-install -Dp -m0644 qtsixa/profiles.list.bu %{buildroot}%{_datadir}/%{name}/profiles.list
+make DESTDIR=%{buildroot} install
 
 #symlink
 pushd %{buildroot}%{_datadir}/%{name}
 	ln -s %{_sysconfdir}/qtsixa.conf .
 popd
-
-# this need rights to execute
-chmod a+x %{buildroot}%{_datadir}/%{name}/gui/qtsixa.pyw
 
 %clean
 rm -rf %{buildroot}
@@ -125,11 +93,11 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc qtsixa/doc/* qtsixa/manual/
+%doc qtsixa/manual/
 %doc README TODO
-%config(noreplace) %{_sysconfdir}/%{name}.conf
-%{_bindir}/sixa
-%{_bindir}/sixa-*
+%{_bindir}/sixpair
+%{_bindir}/sixpair-kbd
+%{_bindir}/sixad-*
 %{_bindir}/qtsixa
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
@@ -142,6 +110,5 @@ rm -rf %{buildroot}
 %{_bindir}/sixad
 %{_sbindir}/*
 %{udev_rulesd}/*
-%{hal_fdidir}/*
 %{_initrddir}/sixad
-%{_mandir}/man1/*
+
