@@ -75,45 +75,7 @@ sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
 %install
 rm -rf %{buildroot}
 
-# sixa, binaries
-install -Dp -m0755 sixad/sixad %{buildroot}%{_bindir}/sixad
-mkdir -p %{buildroot}%{_sbindir}/
-install -Dp -m0755 sixad/bins/* %{buildroot}%{_sbindir}/
-
-# sixa, misc files
-install -Dp -m0644 sixad/98-sixad.rules %{buildroot}%{udev_rulesd}/98-sixad.rules
-install -d %{buildroot}/etc/default/
-install -d %{buildroot}/etc/init.d/
-install -d %{buildroot}}%{_bindir}
-install -d %{buildroot}%{_sbindir}
-install -d %{buildroot}/var/lib/sixad/
-install -m 644 sixad.default %{buildroot}/etc/default/sixad
-install -m 655 sixad/sixad.init %{buildroot}/etc/init.d/sixad
-install -m 655 sixad %{buildroot}%{_bindir}
-install -m 655 bins/sixad-bin %{buildroot}%{_sbindir}
-install -m 655 bins/sixad-sixaxis %{buildroot}%{_sbindir}
-install -m 655 bins/sixad-raw %{buildroot}%{_sbindir}
-
-
-# qtsixa
-install -d -m0755 %{buildroot}%{_datadir}/qtsixa/{game-profiles,gui,pics,lang,icons,sixaxis-profiles}
-install -Dp -m0644 qtsixa/game-profiles/* %{buildroot}%{_datadir}/qtsixa/game-profiles/
-install	-Dp -m0644 qtsixa/gui/* %{buildroot}%{_datadir}/qtsixa/gui/
-install -Dp -m0644 qtsixa/pics/* %{buildroot}%{_datadir}/qtsixa/pics/
-install -Dp -m0644 qtsixa/lang/* %{buildroot}%{_datadir}/qtsixa/lang/
-install -Dp -m0644 qtsixa/icons/* %{buildroot}%{_datadir}/qtsixa/icons/
-install -Dp -m0644 qtsixa/sixaxis-profiles/* %{buildroot}%{_datadir}/qtsixa/sixaxis-profiles/
-install -Dp -m0755 qtsixa/sixa %{buildroot}%{_bindir}
-install	-Dp -m0755 qtsixa/sixa-lq %{buildroot}%{_bindir}
-install	-Dp -m0755 qtsixa/sixa-notify %{buildroot}%{_bindir}
-install	-Dp -m0755 qtsixa/qtsixa %{buildroot}%{_bindir}
-install	-Dp -m0644 qtsixa/qtsixa.conf %{buildroot}%{_sysconfdir}/%{name}.conf
-install -Dp -m0644 qtsixa/qtsixa.desktop %{buildroot}%{_datadir}/applications/qtsixa.desktop
-install -Dp -m0644 qtsixa/qtsixa.xpm %{buildroot}%{_datadir}/pixmaps/qtsixa.xpm
-install -Dp -m0644 qtsixa/profiles.list.bu %{buildroot}%{_datadir}/%{name}/
-install -Dp -m0644 qtsixa/features.html %{buildroot}%{_datadir}/%{name}/
-install -Dp -m0644 qtsixa/sixa-notify.desktop %{buildroot}%{_datadir}/%{name}/
-install -Dp -m0644 qtsixa/profiles.list.bu %{buildroot}%{_datadir}/%{name}/profiles.list
+%makeinstall_std
 
 #symlink
 pushd %{buildroot}%{_datadir}/%{name}
