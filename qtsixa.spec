@@ -1,5 +1,5 @@
 %define name	qtsixa
-%define version	1.4.95
+%define version	1.4.96
 %define rel	1
 
 %define udev_rulesd     /lib/udev/rules.d
@@ -9,7 +9,7 @@ Version:	%{version}
 Release:	%mkrel %{rel}
 Summary:	The Sixaxis Joystick Manager
 Url:		http://qtsixa.sourceforge.net/
-Source:		http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}_%{version}.tar.gz
+Source:		http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}-%{version}.tar.xz
 Patch0:		qtsixa-fstat.patch
 Patch1:		qtsixa-initrddir.patch
 License:	GPLv2
