@@ -56,7 +56,7 @@ sixad is triggered by udev, making it super easy to connect new devices
 %prep
 %setup -q -n qtsixa-1.5.0
 # %patch0 -p0
-%patch1 -p1 -b .initrddir
+# %patch1 -p1 -b .initrddir
 
 #fix rights
 #chmod a-x qtsixa/manual/* qtsixa/doc/* TODO
