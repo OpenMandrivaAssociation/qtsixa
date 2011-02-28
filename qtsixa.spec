@@ -9,7 +9,8 @@ Version:	%{version}
 Release:	%mkrel %{rel}
 Summary:	The Sixaxis Joystick Manager
 Url:		http://qtsixa.sourceforge.net/
-Source:		http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}-%{version}.tar.xz
+Source0:	http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}-%{version}.tar.xz
+Source1:	sixad.init
 Patch0:		qtsixa-fstat.patch
 Patch1:		qtsixa-initrddir.patch
 License:	GPLv2
@@ -76,6 +77,8 @@ sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
 rm -rf %{buildroot}
 
 %makeinstall_std
+install -m 0644 %{SOURCE1} %{buildroot}%{_initrddir}/sixad
+
 
 #symlink
 pushd %{buildroot}%{_datadir}/%{name}
