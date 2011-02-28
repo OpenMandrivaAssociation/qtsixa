@@ -74,9 +74,10 @@ sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
 %make
 
 %install
-rm -rf %{buildroot}
+# rm -rf %{buildroot}
 
 %makeinstall_std
+install -d  %{buildroot}%{_initrddir}
 install -m 0644 %{SOURCE1} %{buildroot}%{_initrddir}/sixad
 
 
@@ -114,4 +115,5 @@ rm -rf %{buildroot}
 %{_sbindir}/*
 %{udev_rulesd}/*
 %{_initrddir}/sixad
-
+%{_sysconfdir}/init.d/sixad
+%{_sysconfdir}/logrotate.d/sixad
