@@ -1,6 +1,7 @@
 %define name	qtsixa
-%define version	1.4.96
+%define version	1.5.1
 %define rel	1
+%define oname	QtSixA
 
 %define udev_rulesd     /lib/udev/rules.d
 
@@ -9,7 +10,7 @@ Version:	%{version}
 Release:	%mkrel %{rel}
 Summary:	The Sixaxis Joystick Manager
 Url:		http://qtsixa.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{name}-%{version}.tar.xz
+Source0:	http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{oname}-%{version}-src.tar.xz
 Source1:	sixad.init
 Patch0:		qtsixa-fstat.patch
 Patch1:		qtsixa-initrddir.patch
@@ -55,7 +56,7 @@ sixad is triggered by udev, making it super easy to connect new devices
 (you just need to press the PS button).
 
 %prep
-%setup -q -n qtsixa-1.5.0
+%setup -q -n QtSixA-1.5.1
 # %patch0 -p0
 # %patch1 -p1 -b .initrddir
 
@@ -63,12 +64,12 @@ sixad is triggered by udev, making it super easy to connect new devices
 #chmod a-x qtsixa/manual/* qtsixa/doc/* TODO
 
 #fix build flags
-sed -i -e 's|-Wall -O2|%{optflags}|g' utils/Makefile
-sed -i -e 's|-g -O2 -g -Wall -O2 -D_FORTIFY_SOURCE=2|%{optflags}|g' utils/hcid/Makefile
+#sed -i -e 's|-Wall -O2|%{optflags}|g' utils/Makefile
+#sed -i -e 's|-g -O2 -g -Wall -O2 -D_FORTIFY_SOURCE=2|%{optflags}|g' utils/hcid/Makefile
 
 #fix build
-sed -i -e 's|/usr/lib/libbluetooth.so|/%{_lib}/libbluetooth.so|g' utils/hcid/Makefile
-sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
+# sed -i -e 's|/usr/lib/libbluetooth.so|/%{_lib}/libbluetooth.so|g' utils/hcid/Makefile
+# sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
 
 %build
 %make
@@ -97,10 +98,10 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc qtsixa/manual/
-%doc README TODO
-%{_bindir}/sixpair
-%{_bindir}/sixpair-kbd
+# %doc qtsixa/manual/
+# %doc README TODO
+# %{_bindir}/sixpair
+# %{_bindir}/sixpair-kbd
 %{_bindir}/sixad-*
 %{_bindir}/qtsixa
 %{_datadir}/%{name}
@@ -109,11 +110,11 @@ rm -rf %{buildroot}
 
 %files -n sixad
 %defattr(-,root,root)
-%doc sixad/README
+# %doc sixad/README
 %config(noreplace) %{_sysconfdir}/default/sixad
 %{_bindir}/sixad
 %{_sbindir}/*
-%{udev_rulesd}/*
+# %{udev_rulesd}/*
 %{_initrddir}/sixad
 %{_sysconfdir}/init.d/sixad
 %{_sysconfdir}/logrotate.d/sixad
