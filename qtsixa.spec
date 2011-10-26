@@ -1,6 +1,6 @@
 %define name	qtsixa
 %define version	1.5.1
-%define rel	1
+%define rel	2
 %define oname	QtSixA
 
 %define udev_rulesd     /lib/udev/rules.d
@@ -100,8 +100,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 # %doc qtsixa/manual/
 # %doc README TODO
-# %{_bindir}/sixpair
-# %{_bindir}/sixpair-kbd
 %{_bindir}/sixad-*
 %{_bindir}/qtsixa
 %{_datadir}/%{name}
@@ -112,6 +110,8 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 # %doc sixad/README
 %config(noreplace) %{_sysconfdir}/default/sixad
+%{_sbindir}/sixpair
+%{_sbindir}/sixpair-kbd
 %{_bindir}/sixad
 %{_sbindir}/*
 # %{udev_rulesd}/*
