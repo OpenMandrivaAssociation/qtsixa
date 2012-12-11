@@ -1,25 +1,22 @@
-%define name	qtsixa
-%define version	1.5.1
-%define rel	2
 %define oname	QtSixA
 
 %define udev_rulesd     /lib/udev/rules.d
 
-Name:		%{name}
-Version:	%{version}
-Release:	%mkrel %{rel}
+Name:		qtsixa
+Version:	1.5.1
+Release:	3
 Summary:	The Sixaxis Joystick Manager
+License:	GPLv2
+Group:		System/Configuration/Hardware
 Url:		http://qtsixa.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{oname}-%{version}-src.tar.xz
 Source1:	sixad.init
-Patch0:		qtsixa-fstat.patch
-Patch1:		qtsixa-initrddir.patch
-License:	GPLv2
-Group:		System/Configuration/Hardware
-BuildRequires:	bluez-devel libjack-devel
-BuildRequires:	libusb-devel
-BuildRequires:	glib2-devel
-BuildRequires:	dbus-devel
+Patch0:		qtsixa-1.5.1-gcc4.7.patch
+BuildRequires:	pkgconfig(bluez)
+BuildRequires:	pkgconfig(jack)
+BuildRequires:	pkgconfig(libusb)
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	python-qt4-devel
 Requires:	sixad = %{version}-%{release}
 Requires:	python-qt4
@@ -57,38 +54,20 @@ sixad is triggered by udev, making it super easy to connect new devices
 
 %prep
 %setup -q -n QtSixA-1.5.1
-# %patch0 -p0
-# %patch1 -p1 -b .initrddir
-
-#fix rights
-#chmod a-x qtsixa/manual/* qtsixa/doc/* TODO
-
-#fix build flags
-#sed -i -e 's|-Wall -O2|%{optflags}|g' utils/Makefile
-#sed -i -e 's|-g -O2 -g -Wall -O2 -D_FORTIFY_SOURCE=2|%{optflags}|g' utils/hcid/Makefile
-
-#fix build
-# sed -i -e 's|/usr/lib/libbluetooth.so|/%{_lib}/libbluetooth.so|g' utils/hcid/Makefile
-# sed -i -e 's|/usr/lib/|%{_libdir}/|g' utils/hcid/Makefile
+%patch0 -p1
 
 %build
 %make
 
 %install
-# rm -rf %{buildroot}
-
 %makeinstall_std
 install -d  %{buildroot}%{_initrddir}
 install -m 0644 %{SOURCE1} %{buildroot}%{_initrddir}/sixad
-
 
 #symlink
 pushd %{buildroot}%{_datadir}/%{name}
 	ln -s %{_sysconfdir}/qtsixa.conf .
 popd
-
-%clean
-rm -rf %{buildroot}
 
 %post -n sixad
 %_post_service sixad
@@ -97,9 +76,6 @@ rm -rf %{buildroot}
 %_preun_service sixad
 
 %files
-%defattr(-,root,root)
-# %doc qtsixa/manual/
-# %doc README TODO
 %{_bindir}/sixad-*
 %{_bindir}/qtsixa
 %{_datadir}/%{name}
@@ -107,14 +83,13 @@ rm -rf %{buildroot}
 %{_datadir}/pixmaps/%{name}.xpm
 
 %files -n sixad
-%defattr(-,root,root)
-# %doc sixad/README
 %config(noreplace) %{_sysconfdir}/default/sixad
+%{_sbindir}/sixad-*
+%{_sbindir}/hidraw-dump
 %{_sbindir}/sixpair
 %{_sbindir}/sixpair-kbd
 %{_bindir}/sixad
-%{_sbindir}/*
-# %{udev_rulesd}/*
 %{_initrddir}/sixad
 %{_sysconfdir}/init.d/sixad
 %{_sysconfdir}/logrotate.d/sixad
+

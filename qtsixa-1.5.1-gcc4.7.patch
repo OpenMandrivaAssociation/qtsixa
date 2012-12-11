@@ -1,0 +1,12 @@
+diff -urN QtSixA-1.5.1/sixad/shared.h QtSixA-1.5.1-patched/sixad/shared.h
+--- QtSixA-1.5.1/sixad/shared.h	2011-10-12 11:37:38.000000000 +1100
++++ QtSixA-1.5.1-patched/sixad/shared.h	2012-11-14 22:59:49.556213983 +1100
+@@ -18,6 +18,8 @@
+ #ifndef SHARED_H
+ #define SHARED_H
+ 
++#include <unistd.h>
++
+ struct dev_led {
+     bool enabled;
+     bool anim;
