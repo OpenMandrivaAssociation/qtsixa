@@ -4,13 +4,13 @@
 
 Name:		qtsixa
 Version:	1.5.1
-Release:	3
+Release:	7
 Summary:	The Sixaxis Joystick Manager
 License:	GPLv2
 Group:		System/Configuration/Hardware
 Url:		http://qtsixa.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{oname}-%{version}-src.tar.xz
-Source1:	sixad.init
+Source1:	sixad.service
 Patch0:		qtsixa-1.5.1-gcc4.7.patch
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(jack)
@@ -26,6 +26,9 @@ Requires:	bluez
 Requires:	bluez-hcidump
 Requires:	xdg-utils
 Requires:	x11-driver-input-joystick
+BuildRequires: systemd
+Requires(preun): systemd
+Requires(post): systemd
 
 %description
 This package provides a useful GUI to control the sixad modules.
@@ -61,8 +64,8 @@ sixad is triggered by udev, making it super easy to connect new devices
 
 %install
 %makeinstall_std
-install -d  %{buildroot}%{_initrddir}
-install -m 0644 %{SOURCE1} %{buildroot}%{_initrddir}/sixad
+install -d %{buildroot}%{_unitdir}
+install -D -p -m 0755 %{SOURCE1} %{buildroot}%{_unitdir}/sixad.service
 
 #symlink
 pushd %{buildroot}%{_datadir}/%{name}
@@ -70,10 +73,13 @@ pushd %{buildroot}%{_datadir}/%{name}
 popd
 
 %post -n sixad
-%_post_service sixad
+%systemd_post sixad.service
 
 %preun -n sixad
-%_preun_service sixad
+%systemd_preun sixad.service
+
+%postun -n sixad
+%systemd_postun_with_restart sixad.service
 
 %files
 %{_bindir}/sixad-*
@@ -89,7 +95,7 @@ popd
 %{_sbindir}/sixpair
 %{_sbindir}/sixpair-kbd
 %{_bindir}/sixad
-%{_initrddir}/sixad
+%{_unitdir}/sixad.service
 %{_sysconfdir}/init.d/sixad
 %{_sysconfdir}/logrotate.d/sixad
 

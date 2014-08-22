@@ -1,0 +1,18 @@
+[Unit]
+Description=This shell script takes care of starting and stopping sixad
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/echo -n "Starting sixad: "
+ExecStart=/usr/bin/sixad &
+ExecStart=/bin/echo
+ExecStart=/bin/touch /var/lock/subsys/sixad
+
+ExecStop=/bin/echo -n "Stopping sixad: "
+ExecStop=/bin/killproc sixad
+ExecStop=/bin/echo
+ExecStop=/bin/rm -f /var/lock/subsys/sixad
+
+[Install]
+WantedBy=multi-user.target
