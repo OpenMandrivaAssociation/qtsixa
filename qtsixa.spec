@@ -4,7 +4,7 @@
 
 Name:		qtsixa
 Version:	1.5.1
-Release:	8
+Release:	9
 Summary:	The Sixaxis Joystick Manager
 License:	GPLv2
 Group:		System/Configuration/Hardware
