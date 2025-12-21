@@ -12,6 +12,7 @@ Url:		https://qtsixa.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{oname}%20%{version}/%{oname}-%{version}-src.tar.xz
 Source1:	sixad.service
 Patch0:		qtsixa-1.5.1-gcc4.7.patch
+BuildRequires:	make
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libusb)
